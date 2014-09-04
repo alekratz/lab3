@@ -35,9 +35,30 @@ int getSize(primitiveType type)
   return -1;
 }
 
-void addElement(arrayList * arylstP, void * element)
+void addElement(arrayList * array, void * element)
 {
-  return;
+  // get whether or not we need to resize the array
+  if(array->numElements == array->arraySize)
+  {
+    // if so, make a new array that's double the size of the old one,
+    // copy all of the elements over, and delete the old array
+    int newSize = array->arraySize * 2;
+    void* newArray = (void*)malloc(newSize * array->elementSize);
+    // copy everything over
+    memcpy(newArray, array->array, array->arraySize * array->elementSize);
+    // free the new array
+    free(array->array);
+    // copy it over
+    array->array = newArray;
+    // set the new size
+    array->arraySize = newSize;
+    // voila
+  }
+
+  // insert the element at the last position
+  array->array[array->elementSize * array->numElements] = *element;
+  // increment the number of elements
+  array->numElements++;
 }
 
 void removeElement(arrayList * arylstP, int index)
