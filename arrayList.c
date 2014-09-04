@@ -60,14 +60,26 @@ void addElement(arrayList * array, void * element)
   switch(array->type)
   {
     case charType:
-      ((char*)(array->array))[array->elementSize * array->numElements] = *((char*)element);
+    {
+      char* a = (char*)array->array;
+      char* elementPtr = (char*)element;
+      a[array->numElements] = *elementPtr;
       break;
+    }
     case shortType:
-      ((short*)(array->array))[array->elementSize * array->numElements] = *((short*)element);
+    {
+      short* a = (short*)array->array;
+      short* elementPtr = (short*)element;
+      a[array->numElements] = *elementPtr;
       break;
+    }
     case intType:
-      ((int*)(array->array))[array->elementSize * array->numElements] = *((int*)element);
+    {
+      int* a = (int*)array->array;
+      int* elementPtr = (int*)element;
+      a[array->numElements] = *elementPtr;
       break;
+    }
   }
   // increment the number of elements
   array->numElements++;
@@ -75,6 +87,36 @@ void addElement(arrayList * array, void * element)
 
 void removeElement(arrayList * array, int index)
 {
+  // shift everything over towards index 0
+  int i; // C99 you mysterious mistress
+  for(i = index; i < array->numElements - 1; i++)
+  {
+    // Shift everything over one
+    switch(array->type)
+    {
+      // brackets are necessary because C is great and has confusing scopes with switch-case
+      case charType:
+      {
+        char* a = (char*)array->array;
+        a[i] = a[i + 1];
+        break;
+      }
+      case shortType:
+      {
+        short* a = (short*)array->array;
+        a[i] = a[i + 1];
+        break;
+      }
+      case intType:
+      {
+        int* a = (int*)array->array;
+        a[i] = a[i + 1];
+        break;
+      }
+    }
+  }
+  // decrement number of elements
+  array->numElements--;
 }
 
 void printArray(arrayList * arylstP)
@@ -84,14 +126,20 @@ void printArray(arrayList * arylstP)
   for (i = 0; i < arylstP->numElements; i++)
   {
     if (arylstP->type == charType)
-      //fill in the missing code that gets the element and &s it with 0xff
-      printf("%02x ", 0xff);
+    {
+      char* a = (char*)arylstP->array;
+      printf("%02x ", a[i] & 0xff);
+    }
     else if (arylstP->type == shortType)
-      //fill in the missing code that gets the element and &s it with 0xffff
-      printf("%04x ", 0xffff);
+    {
+      short* a = (short*)arylstP->array;
+      printf("%04x ", a[i] & 0xffff);
+    }
     else if (arylstP->type == intType)
-      //fill in the missing code that gets the element and &s it with 0xffffffff
-      printf("%08x ", 0xffffffff);
+    {
+      int* a = (int*)arylstP->array;
+      printf("%08x ", a[i] & 0xffffffff);
+    }
   }
   printf("\n");
 }
