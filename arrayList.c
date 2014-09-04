@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "arrayList.h"
 
 //getSize not accessed outside of this file so declare it to be static
@@ -56,14 +57,24 @@ void addElement(arrayList * array, void * element)
   }
 
   // insert the element at the last position
-  array->array[array->elementSize * array->numElements] = *element;
+  switch(array->type)
+  {
+    case charType:
+      ((char*)(array->array))[array->elementSize * array->numElements] = *((char*)element);
+      break;
+    case shortType:
+      ((short*)(array->array))[array->elementSize * array->numElements] = *((short*)element);
+      break;
+    case intType:
+      ((int*)(array->array))[array->elementSize * array->numElements] = *((int*)element);
+      break;
+  }
   // increment the number of elements
   array->numElements++;
 }
 
-void removeElement(arrayList * arylstP, int index)
+void removeElement(arrayList * array, int index)
 {
-  return;
 }
 
 void printArray(arrayList * arylstP)
