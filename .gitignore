@@ -26,5 +26,5 @@
 .*.swo
 .*.swp
 
-# Target
-arrayList
+# Binary directory
+bin/
